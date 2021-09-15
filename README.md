@@ -31,3 +31,12 @@ Test Nest.js backend powers
 Little API project with roles, authorization, api scopes
 
 Pretty pointless, but fun to build.
+
+To run project one need running postgresql service with that credentials.
+```
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=root
+POSTGRES_DB=nestcourse
+```
