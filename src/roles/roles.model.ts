@@ -1,18 +1,29 @@
-import { Model, Table, Column, DataType } from 'sequelize-typescript';
+import {
+  Model,
+  Table,
+  Column,
+  BelongsToMany,
+  DataType,
+} from 'sequelize-typescript';
+
 import { ApiProperty } from '@nestjs/swagger';
 
-interface UserCreationAttributes {
-  email: string;
-  password: string;
+import { User } from '../users/users.model';
+
+import { UserRoles } from '../shared-models/user-roles.model';
+
+interface RoleCreationAttributes {
+  value: string;
+  description: string;
 }
 
 @Table({
-  tableName: 'users',
+  tableName: 'roles',
 })
-export class User extends Model<User, UserCreationAttributes> {
+export class Role extends Model<Role, RoleCreationAttributes> {
   @ApiProperty({
     example: '1',
-    description: 'Unique id of user, autoincrement, primary',
+    description: 'Unique id of role, autoincrement, primary',
   })
   @Column({
     type: DataType.INTEGER,
@@ -23,43 +34,26 @@ export class User extends Model<User, UserCreationAttributes> {
   id: number;
 
   @ApiProperty({
-    example: 'user@email.ru',
-    description: 'Unique email of user, cannot be null',
+    example: 'ADMIN',
+    description: 'Unique role value, can be multiply for one user, !nullable',
   })
   @Column({
     type: DataType.STRING,
     unique: true,
     allowNull: false,
   })
-  email: string;
+  value: string;
 
   @ApiProperty({
-    example: 'passwordOfUser',
-    description: 'Password of user, cannot be null',
+    example: 'Administrator has full rights in this project',
+    description: 'Description of role',
   })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  password: string;
+  description: string;
 
-  @ApiProperty({
-    example: 'false',
-    description: 'Is user banned or not, default value = false',
-  })
-  @Column({
-    type: DataType.BOOLEAN,
-    defaultValue: false,
-  })
-  banned: boolean;
-
-  @ApiProperty({
-    example: 'Reason of ban',
-    description: 'Why user was banned, can be null',
-  })
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  banReason: string;
+  @BelongsToMany(() => User, () => UserRoles)
+  users: User[];
 }
