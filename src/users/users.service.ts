@@ -8,8 +8,8 @@ import { Role } from '../roles/roles.model';
 import { RolesService } from '../roles/roles.service';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
+import { AddRoleDto } from '../roles/dto/add-role.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +29,7 @@ export class UsersService {
 
   async getAllUsers() {
     const allUsers = await this.userRepository.findAll({
-      include: Role,
+      include: [Role],
     });
     return allUsers;
   }
@@ -37,7 +37,7 @@ export class UsersService {
   async getUserByEmail(email: string) {
     const userByEmail = await this.userRepository.findOne({
       where: { email },
-      include: Role,
+      include: [Role],
     });
     return userByEmail;
   }
